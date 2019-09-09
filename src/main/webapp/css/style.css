@@ -4,6 +4,14 @@ body, p, legend, label, input {
     font: normal 8pt verdana, helvetica, sans-serif;
 }
 
+table, th, td {
+  border: 1px solid #ddd;
+}
+
+table {
+  border-collapse: collapse;
+} 
+
 /* Forms --------------------------------------------------------------------------------------- */
 fieldset {
     padding: 10px;
