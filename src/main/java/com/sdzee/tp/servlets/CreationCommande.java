@@ -39,6 +39,11 @@ public class CreationCommande extends HttpServlet{
 				
 		HttpSession session = request.getSession();
 		
+//		String isNouveauClient = request.getParameter("nvoClient");
+//		if(isNouveauClient == "oui") {
+//			session.setAttribute("isNouveauClient", isNouveauClient);
+//		}
+		
 		if(form.getErreurs().isEmpty() && form.getErreursClient().isEmpty()) {
 			if(session.getAttribute("listeCommandes") != null){
 				listeCommandes = (Map<String, Commande>) session.getAttribute("listeCommandes");

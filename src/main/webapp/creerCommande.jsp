@@ -13,6 +13,12 @@
                 <fieldset>
                     <legend>Informations client</legend>
     
+    				<label for="nvoClient">Nouveau client? <span class="requis">*</span></label>
+    				<input type="radio" class="nvoClient" name="nvoClient" value="Oui" onclick="getClientStatus();"/>Oui
+    				<input type="radio" class="nvoClient" name="nvoClient" value="Non" onclick="getClientStatus();"/>Non
+    				<br/>
+    				
+    				<div id="clientInfos">
                     <label for="nomClient">Nom <span class="requis">*</span></label>
                     <input type="text" id="nomClient" name="nomClient" value="<c:out value="${commande.client.nom}"/>" size="20" maxlength="20" />
                     <span class="erreur">${form.erreursClient['nomClient']}</span>
@@ -37,6 +43,16 @@
                     <input type="email" id="emailClient" name="emailClient" value="<c:out value="${commande.client.email}"/>" size="20" maxlength="60" />
                     <span class="erreur">${form.erreursClient['emailClient']}</span>
                     <br />
+
+</div>
+<div id="selectClient" class="hidden">
+                    <select>
+                     <c:forEach var="client" items="${ sessionScope.listeClients }">
+					  <option value=""><c:out value="${ client.getValue().nom }"/> <c:out value="${ client.getValue().prenom }"/></option>
+					  </c:forEach>
+					</select>
+</div>   
+                    
                 </fieldset>
                 <fieldset>
                     <legend>Informations commande</legend>
@@ -76,4 +92,29 @@
             </form>
         </div>
     </body>
+    <script>
+   /*  var nvoClientTableau = document.querySelectorAll('input[name=nvoClient]');
+    console.log(nvoClientTableau);
+    for (var i=0, length = nvoClientTableau.length; i<length; i++){
+    	if(nvoClientTableau[i].checked){
+    		console.log(nvoClientTableau[i].value);
+    	}
+    } */
+    
+    function getClientStatus(){
+    	var nvoClientTableau = document.querySelectorAll('input[name=nvoClient]');
+    for (var i=0, length = nvoClientTableau.length; i<length; i++){
+    	if(nvoClientTableau[i].checked){
+    		console.log(nvoClientTableau[i].value);
+    		if(nvoClientTableau[i].value==="Non"){
+    			document.getElementById("clientInfos").style.display = "none";
+    			document.getElementById("selectClient").style.display = "block";
+    		} else {
+    			document.getElementById("clientInfos").style.display = "block";
+    			document.getElementById("selectClient").style.display = "none";
+    		}
+    	}
+    }
+    }   
+    </script>
 </html>

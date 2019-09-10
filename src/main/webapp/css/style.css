@@ -39,6 +39,10 @@ form input.sansLabel {
     margin-left: 200px;
 }
 
+.hidden {
+	display: none;
+}
+
 /* Styles et couleurs -------------------------------------------------------------------------- */
 .requis {
     color: #c00;
