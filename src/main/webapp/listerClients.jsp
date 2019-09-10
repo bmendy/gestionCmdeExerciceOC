@@ -1,22 +1,22 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<meta charset="utf-8" />
+<title>Liste des clients</title>
+<link type="text/css" rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 <c:if test="${!empty sessionScope.listeClients}">
-  <p class="succes">Voici la liste des clients: 
+  <p>Voici la liste des clients: 
                  
              
-               <%-- Affiche chacune des valeurs pour la clé donnée --%>
+               <%-- Affiche chacune des valeurs pour la clÃ© donnÃ©e --%>
                <table>
                <thead>
                <tr>
-               <th>Nom</th><th>Prénom</th><th>Adresse</th><th>Téléphone</th><th>Email</th>
+               <th>Nom</th><th>PrÃ©nom</th><th>Adresse</th><th>TÃ©lÃ©phone</th><th>Email</th>
                </tr>
                </thead>
                <tbody>
@@ -34,6 +34,9 @@
            
                 
   </p>
+</c:if>
+<c:if test="${empty sessionScope.listeClients}">
+<p>Aucun client n'a Ã©tÃ© crÃ©e lors de cette session</p>
 </c:if>
 </body>
 </html>

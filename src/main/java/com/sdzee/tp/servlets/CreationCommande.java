@@ -3,13 +3,16 @@ package com.sdzee.tp.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -28,11 +31,27 @@ public class CreationCommande extends HttpServlet{
 
 	}
 
+	Map<String, Commande> listeCommandes;
 	public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException{
 		
 		CreationCommandeForm form = new CreationCommandeForm();
 		Commande commande = form.creerCommande(request);
 				
+		HttpSession session = request.getSession();
+		
+		if(form.getErreurs().isEmpty() && form.getErreursClient().isEmpty()) {
+			if(session.getAttribute("listeCommandes") != null){
+				listeCommandes = (Map<String, Commande>) session.getAttribute("listeCommandes");
+				listeCommandes.put(commande.getDate(), commande);
+			}else {
+				listeCommandes = new HashMap<String, Commande>();
+				listeCommandes.put(commande.getDate(), commande);
+			}
+			session.setAttribute("listeCommandes", listeCommandes);
+		} else {
+			session.setAttribute("listeCommandes", null);
+		}
+		
 		request.setAttribute("commande", commande);
 		request.setAttribute("form", form);
 		
