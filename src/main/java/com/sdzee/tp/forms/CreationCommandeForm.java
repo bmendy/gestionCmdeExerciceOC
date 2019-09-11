@@ -23,7 +23,7 @@ public class CreationCommandeForm {
 	private Map <String,String> erreurs = new HashMap();
 	private Map <String,String> erreursClient = new HashMap();
 	private String resultat;
-	
+	Map<String, Client> listeClients;
 
 	
 		
@@ -60,93 +60,96 @@ public class CreationCommandeForm {
       
     
 	public Commande creerCommande(HttpServletRequest request) {
-		
+
 		String commandeMontant = getValeurChamp(request, CHAMP_MONTANT);
 		String modePaiement = getValeurChamp(request, CHAMP_MODEPAIEMENT);
 		String statutPaiement = getValeurChamp(request, CHAMP_STATUTPAIEMENT);
 		String modeLivraison = getValeurChamp(request, CHAMP_MODELIVRAISON);
 		String statutLivraison = getValeurChamp(request, CHAMP_STATUTLIVRAISON);
-		
-		
+
 		Commande commande = new Commande();
 		double valeurMontant = -1;
-		 try {
-			 valeurMontant = validationMontant(commandeMontant);
-		 } catch (Exception e){
-			 setErreur(CHAMP_MONTANT, e.getMessage());
-		 }
-		 commande.setMontant(valeurMontant);
-		 
-		 try {
-			 validationModePaiement(modePaiement);
-		 } catch(Exception e) {
-			 setErreur(CHAMP_MODEPAIEMENT, e.getMessage());
-		 }
-		 commande.setModePaiement(modePaiement);
-		 
-		 try {
-			 validationStatutPaiement(statutPaiement);
-		 } catch (Exception e) {
-			 setErreur(CHAMP_STATUTPAIEMENT, e.getMessage());
-		 }
-		 commande.setStatutPaiement(statutPaiement);
-		 
-		 try {
-			 validationModeLivraison(modeLivraison);
-		 } catch (Exception e) {
-			 setErreur(CHAMP_MODELIVRAISON, e.getMessage());
-		 }
-		 commande.setModeLivraison(modeLivraison);
-		 
-		 try {
-			 validationStatutLivraison(statutLivraison);
-		 } catch (Exception e) {
-			 setErreur(CHAMP_STATUTLIVRAISON, e.getMessage());
-		 }
-		 commande.setStatutLivraison(statutLivraison);
-		 
-		 DateTime dt = new DateTime();
-		 String date = dt.toString("dd/MM/yyyy HH:mm:ss");
-		 commande.setDate(date);
-		 
-		 Client client = null;
-		 String nvoClient = getValeurChamp(request, CHAMP_NVOCLIENT);
-			String nomClientExistant = getValeurChamp(request, "clientExistant");
-			if(nvoClient.equals("Oui")) {		
-				CreationClientForm creationClientForm = new CreationClientForm();
-			    client = creationClientForm.creerClient(request);		    
-			    erreursClient = creationClientForm.getErreurs();
-				} else {
-				 	Map<String, Client> listeClients = (Map<String, Client>) request.getSession().getAttribute("listeClients");
-				 	for (Map.Entry<String, Client> clt: listeClients.entrySet()) {
-				 		if (clt.getKey().equals(nomClientExistant)) {
-				 			client = new Client();
-				 			client.setNom(clt.getKey());
-				 			client.setPrenom(clt.getValue().getPrenom());
-				 			client.setAdresseLivraison(clt.getValue().getAdresseLivraison());
-				 			client.setTelephone(clt.getValue().getTelephone());
-				 			client.setEmail(clt.getValue().getEmail());
-				 		}
-				 	}
+		try {
+			valeurMontant = validationMontant(commandeMontant);
+		} catch (Exception e) {
+			setErreur(CHAMP_MONTANT, e.getMessage());
+		}
+		commande.setMontant(valeurMontant);
+
+		try {
+			validationModePaiement(modePaiement);
+		} catch (Exception e) {
+			setErreur(CHAMP_MODEPAIEMENT, e.getMessage());
+		}
+		commande.setModePaiement(modePaiement);
+
+		try {
+			validationStatutPaiement(statutPaiement);
+		} catch (Exception e) {
+			setErreur(CHAMP_STATUTPAIEMENT, e.getMessage());
+		}
+		commande.setStatutPaiement(statutPaiement);
+
+		try {
+			validationModeLivraison(modeLivraison);
+		} catch (Exception e) {
+			setErreur(CHAMP_MODELIVRAISON, e.getMessage());
+		}
+		commande.setModeLivraison(modeLivraison);
+
+		try {
+			validationStatutLivraison(statutLivraison);
+		} catch (Exception e) {
+			setErreur(CHAMP_STATUTLIVRAISON, e.getMessage());
+		}
+		commande.setStatutLivraison(statutLivraison);
+
+		DateTime dt = new DateTime();
+		String date = dt.toString("dd/MM/yyyy HH:mm:ss");
+		commande.setDate(date);
+
+		Client client = null;
+		String nvoClient = getValeurChamp(request, CHAMP_NVOCLIENT);
+		String nomClientExistant = getValeurChamp(request, "clientExistant");
+		if (nvoClient.equals("Oui")) {
+			CreationClientForm creationClientForm = new CreationClientForm();
+			client = creationClientForm.creerClient(request);
+			erreursClient = creationClientForm.getErreurs();
+
+			if (request.getSession().getAttribute("listeClients") == null) {
+				listeClients = new HashMap<String, Client>();
+				listeClients.put(client.getNom(), client);
+				request.getSession().setAttribute("listeClients", listeClients);
+			} else {
+				listeClients = (Map<String, Client>) request.getSession().getAttribute("listeClients");
+				listeClients.put(client.getNom(), client);
+			}
+		} else {
+			Map<String, Client> listeClients = (Map<String, Client>) request.getSession().getAttribute("listeClients");
+			for (Map.Entry<String, Client> clt : listeClients.entrySet()) {
+				if (clt.getKey().equals(nomClientExistant)) {
+					client = new Client();
+					client.setNom(clt.getKey());
+					client.setPrenom(clt.getValue().getPrenom());
+					client.setAdresseLivraison(clt.getValue().getAdresseLivraison());
+					client.setTelephone(clt.getValue().getTelephone());
+					client.setEmail(clt.getValue().getEmail());
 				}
-		 
-		 commande.setClient(client);
-		 
-		 
-		 if(erreurs.isEmpty() && erreursClient.isEmpty()) {
-	    		resultat = "Succès de la création";
-	    	} else {
-	    		resultat = "Echec de la création";
-	    	}
-		 
-		 return commande;
-		
+			}
+		}
+
+		commande.setClient(client);
+
+		if (erreurs.isEmpty() && erreursClient.isEmpty()) {
+			resultat = "Succès de la création";
+		} else {
+			resultat = "Echec de la création";
+		}
+
+		return commande;
+
 	}
 	
-//	private Client dertermineClientCommande(HttpServletRequest request) {
-//		
-//		return client;
-//	}
 	
 	private void validationModePaiement(String pModePaiement)throws Exception {
 		if(pModePaiement!= null ) {
