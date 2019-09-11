@@ -46,9 +46,9 @@
 
 </div>
 <div id="selectClient" class="hidden">
-                    <select>
+                    <select name="clientExistant">
                      <c:forEach var="client" items="${ sessionScope.listeClients }">
-					  <option value=""><c:out value="${ client.getValue().nom }"/> <c:out value="${ client.getValue().prenom }"/></option>
+					  <option ><c:out value="${ client.getValue().nom }"/></option>
 					  </c:forEach>
 					</select>
 </div>   

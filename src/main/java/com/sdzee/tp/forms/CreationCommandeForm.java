@@ -18,10 +18,13 @@ public class CreationCommandeForm {
 	private static final String CHAMP_STATUTPAIEMENT = "statutPaiementCommande";
 	private static final String CHAMP_MODELIVRAISON = "modeLivraisonCommande";
 	private static final String CHAMP_STATUTLIVRAISON = "statutLivraisonCommande";
+	private static final String CHAMP_NVOCLIENT = "nvoClient";
 	
 	private Map <String,String> erreurs = new HashMap();
 	private Map <String,String> erreursClient = new HashMap();
 	private String resultat;
+	
+
 	
 		
 	public Map<String, String> getErreurs() {
@@ -58,12 +61,6 @@ public class CreationCommandeForm {
     
 	public Commande creerCommande(HttpServletRequest request) {
 		
-		CreationClientForm creationClientForm = new CreationClientForm();
-	    Client client = creationClientForm.creerClient(request);
-	    
-	    erreursClient = creationClientForm.getErreurs();
-	    
-	    
 		String commandeMontant = getValeurChamp(request, CHAMP_MONTANT);
 		String modePaiement = getValeurChamp(request, CHAMP_MODEPAIEMENT);
 		String statutPaiement = getValeurChamp(request, CHAMP_STATUTPAIEMENT);
@@ -112,7 +109,29 @@ public class CreationCommandeForm {
 		 String date = dt.toString("dd/MM/yyyy HH:mm:ss");
 		 commande.setDate(date);
 		 
+		 Client client = null;
+		 String nvoClient = getValeurChamp(request, CHAMP_NVOCLIENT);
+			String nomClientExistant = getValeurChamp(request, "clientExistant");
+			if(nvoClient.equals("Oui")) {		
+				CreationClientForm creationClientForm = new CreationClientForm();
+			    client = creationClientForm.creerClient(request);		    
+			    erreursClient = creationClientForm.getErreurs();
+				} else {
+				 	Map<String, Client> listeClients = (Map<String, Client>) request.getSession().getAttribute("listeClients");
+				 	for (Map.Entry<String, Client> clt: listeClients.entrySet()) {
+				 		if (clt.getKey().equals(nomClientExistant)) {
+				 			client = new Client();
+				 			client.setNom(clt.getKey());
+				 			client.setPrenom(clt.getValue().getPrenom());
+				 			client.setAdresseLivraison(clt.getValue().getAdresseLivraison());
+				 			client.setTelephone(clt.getValue().getTelephone());
+				 			client.setEmail(clt.getValue().getEmail());
+				 		}
+				 	}
+				}
+		 
 		 commande.setClient(client);
+		 
 		 
 		 if(erreurs.isEmpty() && erreursClient.isEmpty()) {
 	    		resultat = "Succès de la création";
@@ -124,7 +143,10 @@ public class CreationCommandeForm {
 		
 	}
 	
-
+//	private Client dertermineClientCommande(HttpServletRequest request) {
+//		
+//		return client;
+//	}
 	
 	private void validationModePaiement(String pModePaiement)throws Exception {
 		if(pModePaiement!= null ) {

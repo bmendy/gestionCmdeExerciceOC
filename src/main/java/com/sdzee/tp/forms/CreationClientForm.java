@@ -114,7 +114,7 @@ public class CreationClientForm {
 	private void validationAdresse(String padresse) throws Exception{
     	if (padresse != null) {
     		if(padresse.trim().length() < 10) {
-    			throw new Exception("Le prenom d'utilisateur doit contenir au moins 10 caractères");
+    			throw new Exception("L'adresse d'utilisateur doit contenir au moins 10 caractères");
     		}
     	}else {
     		throw new Exception("Veuillez remplir l'adresse de livraison");
