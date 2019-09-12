@@ -18,7 +18,7 @@
                <thead>
                <tr>
                <th>Client</th><th>Date</th><th>Montant</th><th>Mode de paiement</th><th>Statut de paiment</th>
-               <th>Mode de livraison</th><th>Statut de livraison</th>
+               <th>Mode de livraison</th><th>Statut de livraison</th><th>Action</th>
                </tr>
                </thead>
                <tbody>
@@ -31,6 +31,7 @@
                <td><c:out value="${ commande.getValue().statutPaiement }"/></td>
                <td><c:out value="${ commande.getValue().modeLivraison }"/></td>
                <td><c:out value="${ commande.getValue().statutLivraison }"/></td>
+               <td>Supprimer</td>
                </tr>
                 </c:forEach>
                </tbody>

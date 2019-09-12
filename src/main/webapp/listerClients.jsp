@@ -1,5 +1,6 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,7 +17,7 @@
                <table>
                <thead>
                <tr>
-               <th>Nom</th><th>Prénom</th><th>Adresse</th><th>Téléphone</th><th>Email</th>
+               <th>Nom</th><th>Prénom</th><th>Adresse</th><th>Téléphone</th><th>Email</th><th>Action</th>
                </tr>
                </thead>
                <tbody>
@@ -27,6 +28,14 @@
                <td><c:out value="${ client.getValue().adresseLivraison }"/></td>
                <td><c:out value="${ client.getValue().telephone }"/></td>
                <td><c:out value="${ client.getValue().email }"/></td>
+               <td>
+               <c:set var="supURL">
+               <c:url value="/suppressionClient">
+               <c:param name="nom" value="${client.getValue().nom}"/>
+               </c:url>
+               </c:set>
+               <a href="${supURL}">Supprimer</a>
+               </td>
                </tr>
                 </c:forEach>
                </tbody>
