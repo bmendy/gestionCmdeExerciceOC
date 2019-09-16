@@ -18,7 +18,7 @@ public class SuppressionCommande extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String dateCommande = request.getParameter("date");
 		Map<String, Client> listeCommandes = (Map<String, Client>) request.getSession().getAttribute("listeCommandes");
-		
+		try {
 		Iterator<String> iterator = listeCommandes.keySet().iterator();
 		while(iterator.hasNext()) {
 			String commandeDeMap = iterator.next();
@@ -27,5 +27,8 @@ public class SuppressionCommande extends HttpServlet {
 			}
 		}
 		this.getServletContext().getRequestDispatcher("/listeCommandes").forward(request, response);
+		} finally {
+			
+		}
 	}
 }
