@@ -14,11 +14,12 @@ import com.sdzee.tp.beans.Client;
 @WebServlet("/suppressionClient")
 public class SuppressionClient extends HttpServlet {
 
+	@SuppressWarnings("finally")
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String nomClient = request.getParameter("nom");
 		Map<String, Client> listeClients = (Map<String, Client>) request.getSession().getAttribute("listeClients");
-
+		try {
 		Iterator<String> iterator = listeClients.keySet().iterator();
 		while(iterator.hasNext()) {
 			String clientDeMap = iterator.next();
@@ -27,5 +28,8 @@ public class SuppressionClient extends HttpServlet {
 			}
 		}
 		this.getServletContext().getRequestDispatcher("/listeClients").forward(request, response);
+		} finally {
+			
+		}
 }
 }
