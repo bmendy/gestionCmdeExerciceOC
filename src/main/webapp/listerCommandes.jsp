@@ -31,7 +31,14 @@
                <td><c:out value="${ commande.getValue().statutPaiement }"/></td>
                <td><c:out value="${ commande.getValue().modeLivraison }"/></td>
                <td><c:out value="${ commande.getValue().statutLivraison }"/></td>
-               <td>Supprimer</td>
+               <td>
+               <c:set var="supURL">
+               <c:url value="/suppressionCommande">
+               <c:param name="date" value="${commande.getValue().date}"/>
+               </c:url>
+               </c:set>
+               <a href="${supURL}">Supprimer</a>
+               </td>
                </tr>
                 </c:forEach>
                </tbody>
